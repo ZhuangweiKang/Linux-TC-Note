@@ -25,18 +25,19 @@ graph TD;
 > 对于无类队列规则来说，网卡对报文不进行类别划分，只进行流量整形，无类队列能够对接收到的数据重新编排，设置延迟和丢包。
 - pfifo_fast：（硬性的缺省配置，不能用TC命令对它进行配置）
 >> 此规则将收到的数据包按照FIFO的原则进行转发，不对数据包进行任何特殊处理。这个队列有三个频道（band）。FIFO规则应用于每一个频道。并且：如果0频道有数据包等待发送，1频道的包就不会被处理，1频道和2频道之间的关系也是如此。
->>> priomap：
-此规则为内核规则，根据数据包的优先权情况，映射到相应的频道。这个银蛇过程是根据数据包的TOS(Type of Service)字节进行的。<br/><br/>
-TOS字节的格式：
+>>> priomap:
+    此规则为内核规则，根据数据包的优先权情况，映射到相应的频道。这个银蛇过程是根据数据包的TOS(Type of Service)字节进行的。
+>>> TOS字节的格式：
 ![TOS字节](./TOS.png)
-![TOS_Bits](./TOS_Bits.png)<br/><br/>
-TOS字节的4个bits定义如下：
+![TOS_Bits](./TOS_Bits.png)
+>>> TOS字节的4个bits定义如下：
 ![TOS meaning](./TOS_mean.png)<br/><br/>
-频道(band)划分规则如下:
-![TOS bands](./TOS_bands.png)
->>> tx queuelen
+>>> 频道(band)划分规则如下:
+![TOS bands](./TOS_bands.png)<br/><br/>
+>>> tx queuelen: 
 队列的长度来自网卡的配置，可用ifconfig和ip命令修改。<br/>
 如设置队列长度为10，执行：ifconfig eth0 txqueuelen 10（不能用tc命令设置这个）。
 
-- 令牌桶过滤器(TBF)
+- 令牌桶过滤器(TBF, Token Bucket Filter)
+>> 只允许以不超过事先设定的速率到来的数据包通过，但可能允许短暂突发流量超过设定值。
 
